@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 42 Practice Quiz 2</title>
+
+    <style>
+        /* --- CSS Variables & Themes --- */
+        :root {
+            --transition-speed: 0.3s;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            
+            /* Default Feedback Colors (Fallback for custom themes) */
+            --feedback-success-bg: #064e3b;
+            --feedback-success-border: #059669;
+            --feedback-success-text: #a7f3d0;
+            --feedback-error-bg: #7f1d1d;
+            --feedback-error-border: #dc2626;
+            --feedback-error-text: #fecaca;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #1e293b; --bg-card: #334155; --bg-header: #0f172a;
+            --text-main: #f1f5f9; --text-muted: #94a3b8; --text-accent: #38bdf8;
+            --border-color: #475569; --highlight-bg: #475569;
+            --button-bg: #38bdf8; --button-text: #0f172a; --button-hover: #0ea5e9;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f3f4f6; --bg-card: #ffffff; --bg-header: #ffffff;
+            --text-main: #1f2937; --text-muted: #6b7280; --text-accent: #2563eb;
+            --border-color: #e5e7eb; --highlight-bg: #f3f4f6;
+            --button-bg: #2563eb; --button-text: #ffffff; --button-hover: #1d4ed8;
+            --feedback-success-bg: #ecfdf5; --feedback-success-border: #34d399; --feedback-success-text: #065f46;
+            --feedback-error-bg: #fef2f2; --feedback-error-border: #f87171; --feedback-error-text: #991b1b;
+        }
+
+        [data-theme="midnight"] {
+            --bg-body: #000000; --bg-card: #000000; --bg-header: #000000;
+            --text-main: #e0e0e0; --text-muted: #888888; --text-accent: #90caf9;
+            --border-color: #333333; --highlight-bg: #1a1a1a;
+            --button-bg: #90caf9; --button-text: #000000; --button-hover: #42a5f5;
+            --feedback-success-bg: #051b11; --feedback-success-border: #0f5132; --feedback-success-text: #75b798;
+            --feedback-error-bg: #2c0b0e; --feedback-error-border: #842029; --feedback-error-text: #ea868f;
+        }
+
+        [data-theme="legacy-dark"] {
+            --bg-body: #2d343e; --bg-card: #3c424f; --bg-header: #3c424f;
+            --text-main: #e8e6e3; --text-muted: #b0c4de; --text-accent: #8ab4f8;
+            --border-color: #555; --highlight-bg: #454c5a;
+            --button-bg: #8ab4f8; --button-text: #202124; --button-hover: #a3c5f9;
+            --feedback-success-bg: #344e41; --feedback-success-border: #52b788; --feedback-success-text: #c7f9cc;
+            --feedback-error-bg: #5e2129; --feedback-error-border: #a4133c; --feedback-error-text: #f8d7da;
+        }
+
+        [data-theme="sepia"] {
+            --bg-body: #f4ecd8; --bg-card: #fdf6e3; --bg-header: #e4d5b7;
+            --text-main: #433422; --text-muted: #7c6f5a; --text-accent: #a05a2c;
+            --border-color: #d3c4a5; --highlight-bg: #ebe1c9;
+            --button-bg: #a05a2c; --button-text: #fdf6e3; --button-hover: #864822;
+            --feedback-success-bg: #e6f4ea; --feedback-success-border: #8ab893; --feedback-success-text: #2e4c35;
+            --feedback-error-bg: #f9e3e3; --feedback-error-border: #d48f8f; --feedback-error-text: #5c2b2b;
+        }
+
+        [data-theme="contrast"] {
+            --bg-body: #000000; --bg-card: #000000; --bg-header: #000000;
+            --text-main: #ffffff; --text-muted: #dddddd; --text-accent: #ffff00;
+            --border-color: #ffffff; --highlight-bg: #333333;
+            --button-bg: #ffff00; --button-text: #000000; --button-hover: #e6e600;
+            --feedback-success-bg: #000000; --feedback-success-border: #00ff00; --feedback-success-text: #00ff00;
+            --feedback-error-bg: #000000; --feedback-error-border: #ff0000; --feedback-error-text: #ff0000;
+        }
+
+        /* --- Global Reset & Layout --- */
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            line-height: 1.6;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--bg-header);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        header.unpinned { position: relative; box-shadow: none; }
+
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; flex-wrap: wrap; gap: 15px;
+        }
+
+        header h1 { font-size: 1.5rem; margin: 0; color: var(--text-accent); font-weight: 700; }
+
+        .controls-wrapper { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+        /* --- Custom Theme Builder --- */
+        .custom-builder {
+            display: none; flex-wrap: wrap; gap: 15px;
+            background-color: var(--bg-card); padding: 10px 15px;
+            border-radius: 8px; border: 1px solid var(--border-color);
+            margin-top: 5px; font-size: 0.85rem; animation: fadeIn 0.3s;
+            width: 100%; justify-content: flex-end;
+        }
+        .custom-builder.active { display: flex; }
+        .color-picker-group { display: flex; align-items: center; gap: 8px; }
+        .color-picker-group input[type="color"] {
+            border: none; width: 25px; height: 25px; border-radius: 4px;
+            cursor: pointer; padding: 0; background: none;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Controls --- */
+        .header-btn {
+            background-color: var(--highlight-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-btn:hover {
+            border-color: var(--text-accent);
+            color: var(--text-accent);
+        }
+
+        .pin-btn {
+            background: none; border: 1px solid var(--border-color); color: var(--text-main);
+            cursor: pointer; padding: 0 10px; border-radius: 6px; font-size: 1rem;
+            transition: background-color 0.2s; height: 34px; display: flex;
+            align-items: center; justify-content: center;
+        }
+        .pin-btn:hover { background-color: var(--highlight-bg); }
+        .pin-btn.pin-active { background-color: rgba(0, 0, 0, 0.1); }
+
+        select#theme-select {
+            padding: 0 12px; border-radius: 6px; border: 1px solid var(--border-color);
+            background-color: var(--bg-card); color: var(--text-main);
+            cursor: pointer; font-family: inherit; height: 34px;
+        }
+
+        /* --- Section Navigation --- */
+        .section-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .section-nav button {
+            background-color: var(--highlight-bg); color: var(--text-main);
+            border: 1px solid var(--border-color); padding: 6px 12px;
+            border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+            font-weight: 500; transition: all 0.2s;
+        }
+        .section-nav button:hover { border-color: var(--text-accent); color: var(--text-accent); }
+
+        /* --- Main Content --- */
+        .container {
+            max-width: 850px;
+            margin: 2rem auto;
+            padding: 0 1rem 4rem 1rem;
+        }
+
+        .section-header {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--text-accent);
+            color: var(--text-accent);
+            font-size: 1.5rem;
+            font-weight: 700;
+            scroll-margin-top: 150px; /* Offset for sticky header */
+        }
+
+        /* --- Question Card --- */
+        .question-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .lo-box {
+            background-color: var(--highlight-bg);
+            border-left: 4px solid var(--text-accent);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            display: none; /* Hidden by default */
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Options --- */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: var(--highlight-bg);
+            border-color: var(--text-muted);
+        }
+
+        .option-label input {
+            margin-top: 0.3rem;
+            margin-right: 1rem;
+            accent-color: var(--text-accent);
+            transform: scale(1.2);
+        }
+
+        /* --- Buttons --- */
+        .btn-check {
+            margin-top: 1.5rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-check:hover {
+            opacity: 0.9;
+        }
+
+        .btn-link {
+            display: inline-block;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-link:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Feedback Area --- */
+        .feedback {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: none; /* Hidden by default */
+            border: 1px solid transparent;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background-color: var(--feedback-success-bg);
+            border-color: var(--feedback-success-border);
+            color: var(--feedback-success-text);
+        }
+
+        .feedback.incorrect {
+            background-color: var(--feedback-error-bg);
+            border-color: var(--feedback-error-border);
+            color: var(--feedback-error-text);
+        }
+
+        .feedback-header {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .rationale {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .source {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-style: italic;
+            border-top: 1px dashed currentColor;
+            padding-top: 0.5rem;
+        }
+
+        /* --- Mobile Tweaks --- */
+        @media (max-width: 768px) {
+            .header-top { flex-direction: column; align-items: flex-start; }
+            .controls-wrapper { width: 100%; justify-content: flex-start; }
+            .section-nav { justify-content: flex-start; }
+            .custom-builder { justify-content: flex-start; }
+            header h1 { font-size: 1.25rem; }
+            #reveal-all-container { justify-content: flex-start !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="header-top">
+            <h1>Week 42 Practice Quiz 2</h1>
+            <div class="controls-wrapper">
+                
+                <!-- Reveal LOs Button -->
+                <button id="reveal-all-btn" class="header-btn" onclick="toggleAllLOs()">Show Learning Objectives</button>
+                
+                <!-- Pin Button -->
+                <button class="pin-btn pin-active" id="pin-btn" onclick="toggleHeader()" title="Pin/Unpin Header">📌</button>
+                
+                <!-- Theme Selector -->
+                <div class="theme-control">
+                    <select id="theme-select" onchange="changeTheme(this.value)">
+                        <option value="dark">Modern Dark</option>
+                        <option value="midnight">Midnight</option>
+                        <option value="light">Modern Light</option>
+                        <option value="legacy-dark">Legacy Dark</option>
+                        <option value="sepia">Sepia</option>
+                        <option value="contrast">High Contrast</option>
+                        <option value="custom">⚙️ Custom...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Custom Theme Color Pickers -->
+            <div class="custom-builder" id="custom-builder">
+                <div class="color-picker-group">
+                    <label>Background:</label>
+                    <input type="color" id="color-bg" value="#1a1a2e" oninput="updateCustomTheme()">
+                </div>
+                <div class="color-picker-group">
+                    <label>Cards:</label>
+                    <input type="color" id="color-card" value="#16213e" oninput="updateCustomTheme()">
+                </div>
+                <div class="color-picker-group">
+                    <label>Text:</label>
+                    <input type="color" id="color-text" value="#e94560" oninput="updateCustomTheme()">
+                </div>
+                <div class="color-picker-group">
+                    <label>Accent:</label>
+                    <input type="color" id="color-accent" value="#0f3460" oninput="updateCustomTheme()">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dynamic Navigation Bar -->
+        <div class="section-nav" id="section-nav"></div>
+    </header>
+
+    <div class="container">
+        <div id="quiz-root">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const quizData =[
+            // --- Section 1: Pelvis ---
+            {
+                section: "Pelvis",
+                fullLO: "LO1: Identify and describe the osteology of the pelvis, including bony landmarks, joints, and associated ligaments.",
+                question: "A 34-year-old woman in her third trimester of pregnancy complains of a waddling gait and mild pelvic joint discomfort. Her obstetrician explains that her body is secreting a hormone that causes relaxation of her pelvic ligaments to facilitate delivery. Despite this hormonally induced expansion of pelvic diameters, which of the following pelvic measurements remains anatomically completely unaffected?",
+                options: {
+                    A: "Interspinous distance",
+                    B: "Subpubic angle",
+                    C: "Transverse diameter of the greater pelvis",
+                    D: "Transverse diameter of the pelvic outlet",
+                    E: "True (obstetrical) conjugate"
+                },
+                correctAnswer: "E",
+                rationale: "During the latter part of pregnancy, the hormone relaxin causes pelvic joints and ligaments to relax, producing a 10-15% increase in pelvic diameters. However, the true (obstetrical) conjugate (the distance from the midpoint of the sacral promontory to the closest point of the pubic symphysis) is unaffected because it does not involve any relaxing joints.",
+                source: "Pelvis PDF, Page 3: 'During the latter part of pregnancy, increased levels of sex hormones & the hormone relaxin cause the pelvic joints & ligaments to relax to facilitate delivery... However, the true (obstetrical) conjugate, the distance from the midpoint of the sacral promontory to the closest point of the pubic symphysis (10-12 cm), is unaffected (no joints involved).'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO1: Identify and describe the osteology of the pelvis, including bony landmarks, joints, and associated ligaments.",
+                question: "A radiologist is reviewing a pelvic X-ray of a trauma patient. He notes intact ligamentous structures that convert the greater and lesser sciatic notches of the hip bone into distinct foramina. Which of the following ligaments specifically extends between the sacrum and the ischial spine to assist in creating these foramina?",
+                options: {
+                    A: "Anterior sacroiliac ligament",
+                    B: "Inguinal ligament",
+                    C: "Sacroiliac ligament",
+                    D: "Sacrospinous ligament",
+                    E: "Sacrotuberous ligament"
+                },
+                correctAnswer: "D",
+                rationale: "The sacrospinous ligament extends between the sacrum and the ischial spine (deep to the sacrotuberous ligament). Together with the sacrotuberous ligament, it converts the sciatic notches into the greater and lesser sciatic foramina.",
+                source: "Pelvis PDF, Page 3: 'Sacrospinous ligament – extends between sacrum & ischial spine, deep to the sacrotuberous ligament. Converts sciatic notches into greater & lesser sciatic foramina.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO2: Differentiate the pelvic inlet and outlet, greater and lesser pelvis, and diameters (conjugates) of the pelvis and discuss their clinical significance.",
+                question: "An obstetrician is evaluating a pregnant patient's pelvis to assess the feasibility of a vaginal delivery. She measures the distance between the patient's ischial spines, which represents the narrowest part of the pelvic canal. This specific anatomical measurement is known as the:",
+                options: {
+                    A: "Anatomical conjugate",
+                    B: "Diagonal conjugate",
+                    C: "Interspinous distance",
+                    D: "Obstetrical conjugate",
+                    E: "Transverse diameter of the inlet"
+                },
+                correctAnswer: "C",
+                rationale: "The interspinous distance is the measurement between the ischial spines. It represents the narrowest part of the pelvic canal, though it is not a fixed distance.",
+                source: "Pelvis PDF, Page 3: 'Interspinous distance – distance between the ischial spines; narrowest part of the pelvic canal (~9.5-11.5 cm), but it is not a fixed distance'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO2: Differentiate the pelvic inlet and outlet, greater and lesser pelvis, and diameters (conjugates) of the pelvis and discuss their clinical significance.",
+                question: "A medical student is asked to identify the boundaries separating the greater pelvis from the lesser pelvis on a skeletal model. The superior pelvic aperture (pelvic inlet) serves as this division. Which of the following bony landmarks is a direct component of the pelvic brim that defines this inlet?",
+                options: {
+                    A: "Anterior superior iliac spine (ASIS)",
+                    B: "Ischial tuberosity",
+                    C: "Obturator foramen",
+                    D: "Promontory of the sacrum",
+                    E: "Tip of the coccyx"
+                },
+                correctAnswer: "D",
+                rationale: "The pelvic inlet (superior pelvic aperture) divides the greater and lesser pelvis. It is bounded by the pelvic brim, which is formed by the pubic symphysis, pubic crest, pectineal line, arcuate line of the ilium, ala of the sacrum, and the sacral promontory.",
+                source: "Pelvis PDF, Page 2: 'Pelvic Inlet (Superior pelvic aperture) Bounded by: pelvic brim formed by the pubic symphysis, pubic crest, pectineal line, arcuate line of the ilium (rounded ridge on medial surface), ala of the sacrum (upper lateral portion of sacrum), and sacral promontory'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO3: Describe the muscular and fascial components of the walls and floor of the lesser pelvis, including their attachments, innervation, and function. Describe possible consequences of trauma to the pelvic floor.",
+                question: "A 35-year-old woman complains of fecal incontinence following a difficult, prolonged vaginal delivery. The obstetrician suspects a severe tearing injury to the muscular sling that passes posterior to the anorectal junction. Damage to which of the following muscles is most likely responsible for her loss of fecal continence?",
+                options: {
+                    A: "Coccygeus",
+                    B: "Iliococcygeus",
+                    C: "Obturator internus",
+                    D: "Piriformis",
+                    E: "Puborectalis"
+                },
+                correctAnswer: "E",
+                rationale: "The puborectalis muscle (part of the levator ani) forms a U-shaped muscular sling around the anorectal junction. It maintains the anorectal flexure and plays a major role in maintaining fecal continence. Tearing of this muscle during childbirth can cause fecal incontinence.",
+                source: "Pelvis PDF, Page 3: 'Clinical Note: Puborectalis muscles form a sling around the anorectal junction to maintain the anorectal flexure, thus playing a major role in fecal continence.' AND 'the pubococcygeus & puborectalis muscles, which encircle & support the urethra, vagina, & anal canal, may be torn during childbirth... presenting as urinary incontinence, fecal incontinence' (Pelvis PDF, Page 4)"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO3: Describe the muscular and fascial components of the walls and floor of the lesser pelvis, including their attachments, innervation, and function. Describe possible consequences of trauma to the pelvic floor.",
+                question: "A 45-year-old man undergoes pelvic imaging which reveals a tumor invading the lateral wall of his lesser pelvis. The tumor is situated within a muscle that originates within the lesser pelvis, exits through the lesser sciatic foramen, and inserts onto the greater trochanter of the femur. Which of the following muscles is affected?",
+                options: {
+                    A: "Coccygeus",
+                    B: "Iliococcygeus",
+                    C: "Obturator internus",
+                    D: "Piriformis",
+                    E: "Pubococcygeus"
+                },
+                correctAnswer: "C",
+                rationale: "The obturator internus forms the lateral wall of the pelvic cavity. It originates within the lesser pelvis, exits through the lesser sciatic foramen, and turns sharply laterally to attach to the greater trochanter of the femur.",
+                source: "Pelvis PDF, Page 3: 'Lateral wall: Obturator internus... Origin: Pelvic surface of ilium, ischium, & obturator membrane... Distal Attachment: Greater trochanter of femur *Exits pelvis via lesser sciatic foramen'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO4: Define the peritoneal reflections and pouches of the male and female pelvises and their clinical significance.",
+                question: "A 28-year-old woman presents to the emergency department with severe lower abdominal pain and a positive pregnancy test. An ultrasound reveals a ruptured ectopic pregnancy with extensive hemoperitoneum. A needle is inserted through the posterior vaginal fornix to extract this accumulated blood (culdocentesis). The fluid is being drained directly from which of the following anatomical spaces?",
+                options: {
+                    A: "Ischioanal fossa",
+                    B: "Rectouterine pouch (of Douglas)",
+                    C: "Rectovesical pouch",
+                    D: "Superficial perineal pouch",
+                    E: "Uterovesical pouch"
+                },
+                correctAnswer: "B",
+                rationale: "The rectouterine pouch is the lowest point of the female peritoneal cavity where fluid/blood accumulates. It is directly accessible via the posterior vaginal fornix for fluid extraction (culdocentesis).",
+                source: "Pelvis PDF, Page 7: 'The posterior fornix is the deepest portion & directly related to the rectouterine pouch. This constitutes the area where there is a minimum of tissue intervening between the peritoneal cavity & the external environment. It is used as a site for culdocentesis (extraction of fluid from the rectouterine pouch through a needle)'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO4: Define the peritoneal reflections and pouches of the male and female pelvises and their clinical significance.",
+                question: "A 60-year-old man with a perforated appendix develops a pelvic abscess. As purulent fluid tracks downward due to gravity, it accumulates in the inferiormost extent of his peritoneal cavity. In a male, this specific space is located immediately between which of the following structures?",
+                options: {
+                    A: "Bladder and pubic symphysis",
+                    B: "Prostate and rectum",
+                    C: "Rectum and bladder",
+                    D: "Rectum and sacrum",
+                    E: "Seminal vesicles and prostate"
+                },
+                correctAnswer: "C",
+                rationale: "In males, the peritoneum reflects from the rectum to the bladder, creating the rectovesical pouch. This pouch is the lowest point of the male pelvic cavity where pus and fluid can collect.",
+                source: "Pelvis PDF, Page 4: 'Rectovesical pouch – depression between the rectum & bladder in males... The rectovesical pouch (males) and rectouterine pouch (females) are the inferiormost extent of the peritoneal cavity. These are sites where fluid, blood, pus, etc. may collect.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO5: Identify and describe the vasculature found within the pelvis, including regions/structures that the vessels supply/drain and their relationships to other structures.",
+                question: "During a total abdominal hysterectomy on a 48-year-old woman, the surgeon meticulously isolates and ligates the uterine arteries. To avoid a catastrophic iatrogenic injury during this specific step, the surgeon must positively identify and exclude a tubular structure that passes immediately inferior to the uterine artery (\"water under the bridge\"). Which of the following structures must be protected?",
+                options: {
+                    A: "Fallopian tube",
+                    B: "Internal pudendal artery",
+                    C: "Round ligament of the uterus",
+                    D: "Ureter",
+                    E: "Vaginal artery"
+                },
+                correctAnswer: "D",
+                rationale: "The uterine artery passes superior to the ureter near the lateral vaginal fornix. Because of this \"water under the bridge\" relationship, the ureter is in significant danger of being inadvertently clamped, ligated, or transected during a hysterectomy.",
+                source: "Pelvis PDF, Page 7: 'Uterine arteries (from internal iliac a.) – runs medially toward the cervix; pass superior to the ureters near the lateral fornix of the vagina. Clinical Note: This is an important relationship (“water under the bridge”) for surgeons ligating the uterine artery, as in a hysterectomy. The ureters must be positively identified & excluded from ligature.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO5: Identify and describe the vasculature found within the pelvis, including regions/structures that the vessels supply/drain and their relationships to other structures.",
+                question: "A 55-year-old man undergoes surgical repair of a femoral hernia. During the procedure, the surgeon inadvertently lacerates an aberrant artery crossing the femoral canal, resulting in severe hemorrhage (a \"Corona Mortis\" injury). In this anatomical variant, the aberrant obturator artery most commonly arises directly from which of the following vessels?",
+                options: {
+                    A: "Common iliac artery",
+                    B: "External iliac artery",
+                    C: "Inferior epigastric artery",
+                    D: "Internal iliac artery",
+                    E: "Superior gluteal artery"
+                },
+                correctAnswer: "C",
+                rationale: "\"Corona Mortis\" refers to an aberrant obturator artery that arises from the inferior epigastric artery (a branch of the external iliac) rather than its normal origin from the internal iliac artery. It crosses the femoral canal and is highly susceptible to severe hemorrhagic injury during hernia repairs.",
+                source: "Pelvis PDF, Page 5: 'Clinical Note: The inferior epigastric artery (br. of external iliac a.) gives rise to the obturator artery ~ 20-25% of the time and may be classified as an aberrant (replacement) or accessory (additional) obturator artery. It then passes close to or across the femoral canal to reach the obturator foramen and is thus susceptible to damage during hernia repairs.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO6: Identify and describe the sacral plexus and its distribution to the pelvis and lower limb. Describe the functional significance of lesions to these nerves.",
+                question: "A 30-year-old woman sustains a deep laceration to her posterior pelvis that severs the pudendal nerve. Consequently, she completely loses somatic motor innervation to her perineum and external genitalia. Anatomically, this nerve exits the pelvis through the greater sciatic foramen and subsequently enters the perineum by wrapping around a ligament and passing through which of the following structures?",
+                options: {
+                    A: "Inguinal canal",
+                    B: "Lesser sciatic foramen",
+                    C: "Obturator canal",
+                    D: "Pudendal (Alcock's) canal",
+                    E: "Urogenital hiatus"
+                },
+                correctAnswer: "B",
+                rationale: "The pudendal nerve (S2-S4) exits the pelvis via the greater sciatic foramen, wraps around the sacrospinous ligament, and then enters the perineum through the lesser sciatic foramen.",
+                source: "Pelvis PDF, Page 6: 'Pudendal Nerve (S2–S4) – supplies the perineum and external genitalia; exits pelvis and wraps around the sacrospinous ligament to enter the perineum' [Note: it re-enters via the lesser sciatic foramen]."
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO6: Identify and describe the sacral plexus and its distribution to the pelvis and lower limb. Describe the functional significance of lesions to these nerves.",
+                question: "A 45-year-old man receives a poorly placed intramuscular injection in his gluteal region, resulting in direct injury to the sciatic nerve. The patient subsequently exhibits severe motor deficits in his posterior thigh, leg, and foot. Prior to exiting the pelvis, the converging roots of the sciatic nerve (L4-S3) are anatomically located directly on the anterior surface of which of the following muscles?",
+                options: {
+                    A: "Coccygeus",
+                    B: "Iliococcygeus",
+                    C: "Obturator internus",
+                    D: "Piriformis",
+                    E: "Puborectalis"
+                },
+                correctAnswer: "D",
+                rationale: "The roots of the sacral plexus, including the large sciatic nerve (L4-S3), converge on the anterior surface of the piriformis muscle before passing through the greater sciatic foramen inferior to the piriformis.",
+                source: "Pelvis PDF, Page 6: 'Sciatic Nerve (L4–S3) – exits pelvis via greater sciatic foramen inferior to piriformis; supplies posterior thigh, entire leg, and foot'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO7: Explain the general autonomic (sympathetic and parasympathetic) innervation pattern of the pelvis. Discuss the pelvic pain line and the route visceral afferent fibers travel from the pelvis in relationship to it.",
+                question: "A 28-year-old woman is in active labor. As her cervix dilates, she experiences intense pain. Because the uterine cervix is anatomically located below the pelvic pain line, the visceral afferent fibers carrying this pain sensation travel retrogradely back to the spinal cord alongside which of the following nerve pathways?",
+                options: {
+                    A: "Lumbar splanchnic nerves to T11-L2",
+                    B: "Parasympathetic fibers to S2-S4",
+                    C: "Pudendal nerve to S2-S4",
+                    D: "Sympathetic fibers to S2-S4",
+                    E: "Sympathetic fibers to T11-L2"
+                },
+                correctAnswer: "B",
+                rationale: "The pelvic pain line determines the route of visceral pain. Structures above the line send pain fibers back with sympathetics to T11-L2. Structures below the line (like the uterine cervix and vagina) send pain fibers retrogradely with parasympathetic pathways to the S2-S4 spinal cord segments.",
+                source: "Pelvis PDF, Page 7: 'Below the pelvic pain line: vagina & uterine cervix → pain fibers travel retrogradely following the parasympathetic pathways to the S2-S4 spinal cord segments.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO7: Explain the general autonomic (sympathetic and parasympathetic) innervation pattern of the pelvis. Discuss the pelvic pain line and the route visceral afferent fibers travel from the pelvis in relationship to it.",
+                question: "During a surgical procedure, a neurosurgeon maps the autonomic pathways regulating the male urinary bladder. To artificially stimulate contraction of the detrusor muscle and empty the bladder, the surgeon applies a mild electrical current to the presynaptic parasympathetic fibers originating from S2-S4. These specific fibers travel to the inferior hypogastric plexus via which of the following nerves?",
+                options: {
+                    A: "Genitofemoral nerves",
+                    B: "Lumbar splanchnic nerves",
+                    C: "Pelvic splanchnic nerves",
+                    D: "Pudendal nerves",
+                    E: "Sacral sympathetic trunk"
+                },
+                correctAnswer: "C",
+                rationale: "Parasympathetic innervation to the pelvic viscera (which stimulates detrusor contraction and relaxes involuntary sphincters) originates in the S2-S4 spinal cord segments and travels through the pelvic splanchnic nerves to join the pelvic plexuses.",
+                source: "Pelvis PDF, Page 6: 'Parasympathetic Innervation 1. Pelvic splanchnic nerves (from S2–S4) – supply presynaptic parasympathetic innervation to pelvic & perineal viscera... Functions: Stimulate contraction of the detrusor muscle of urinary bladder for urination'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO8: Discuss the anatomical features, location/positioning, neurovascular supply, lymphatic drainage, associated ligaments, and general functions of the pelvic viscera in females.",
+                question: "A 30-year-old woman is evaluated for infertility. A hysterosalpingography reveals a bilateral blockage preventing eggs from entering the uterine tubes. The normal anatomical site where the ovulated egg is initially caught by finger-like fimbriae and enters the oviduct is the:",
+                options: {
+                    A: "Ampulla",
+                    B: "Cervical canal",
+                    C: "Infundibulum",
+                    D: "Isthmus",
+                    E: "Uterine part"
+                },
+                correctAnswer: "C",
+                rationale: "The uterine tube consists of several parts. The infundibulum is the funnel-shaped distal end that opens into the peritoneal cavity and contains the fimbriae (finger-like projections) which catch the released oocyte.",
+                source: "Pelvis PDF, Page 13: 'Parts: a. Infundibulum – funnel-shaped distal end that opens into the peritoneal cavity; fimbriae (fingerlike projections) located at the end of the uterine tube spread over the medial surface of the ovary to catch the released oocyte'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO8: Discuss the anatomical features, location/positioning, neurovascular supply, lymphatic drainage, associated ligaments, and general functions of the pelvic viscera in females.",
+                question: "A 45-year-old woman undergoes a routine pelvic examination. The physician assesses the orientation of her uterus and documents a normal, typical anatomical position. In this normal configuration, the uterine body is flexed anteriorly relative to the cervix, and the entire organ is tipped anterosuperiorly relative to the vaginal axis. Which of the following terms correctly describes this specific uterine orientation?",
+                options: {
+                    A: "Anteverted and anteflexed",
+                    B: "Anteverted and retroflexed",
+                    C: "Retroverted and anteflexed",
+                    D: "Retroverted and retroflexed",
+                    E: "Transversely displaced"
+                },
+                correctAnswer: "A",
+                rationale: "The normal positioning of the uterus is anteverted (the entire organ is tipped anteriorly relative to the axis of the vagina) and anteflexed (the uterine body is flexed or bent anteriorly relative to the cervix).",
+                source: "Pelvis PDF, Page 14: 'Normal positioning: a. Anteverted – the uterine body is tipped anteriorly, relative to the axis of the vagina... b. Anteflexed – the uterine body is flexed or bent anteriorly relative to the cervix'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO9: Discuss the anatomical features, location/positioning, neurovascular supply, lymphatic drainage, associated ligaments, and general functions of the pelvic viscera in males.",
+                question: "A 70-year-old man presents with severe lower urinary tract symptoms, including a weak urinary stream and frequent nighttime urination. Digital rectal examination reveals a diffusely enlarged, smooth prostate gland. The physician explains that a specific zone of his prostate surrounding the urethra has undergone hormone-induced benign hyperplasia. Which of the following is the anatomical name for this affected region?",
+                options: {
+                    A: "Anterior (muscular) zone",
+                    B: "Central zone",
+                    C: "Peripheral zone",
+                    D: "Transitional zone",
+                    E: "Uterovesical zone"
+                },
+                correctAnswer: "D",
+                rationale: "The prostate is divided into functional zones. The transitional zone surrounds the urethra (comprising ~5% of prostate volume normally) and is the most common site for benign prostatic hyperplasia (BPH), which impedes urination. The peripheral zone is the most common site for prostate cancer.",
+                source: "Pelvis PDF, Page 12: 'Transitional zone – surrounds the urethra (~5% of prostate volume); most common site of benign prostatic hyperplasia'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO9: Discuss the anatomical features, location/positioning, neurovascular supply, lymphatic drainage, associated ligaments, and general functions of the pelvic viscera in males.",
+                question: "A 25-year-old man sustains a severe pelvic fracture in a motorcycle accident. The trauma surgeon is highly concerned about potential laceration to a specific portion of the male urethra that passes through the pelvic floor. Because of its very thin walls and lack of surrounding protective erectile tissue, this segment is highly vulnerable to traumatic rupture. Which of the following segments of the urethra fits this anatomical description?",
+                options: {
+                    A: "Intramural (pre-prostatic) urethra",
+                    B: "Membranous urethra",
+                    C: "Penile (spongy) urethra",
+                    D: "Prostatic urethra",
+                    E: "Ureteric orifice"
+                },
+                correctAnswer: "B",
+                rationale: "The male urethra has four parts. The membranous part passes through the pelvic floor muscles. It is the narrowest, most unprotected, and thin-walled part, making it highly susceptible to rupture from pelvic fractures or improper catheterization.",
+                source: "Pelvis PDF, Page 8: 'Membranous part – narrowest part; passes through pelvic floor muscles (urogenital diaphragm) and is surrounded by the external urethral sphincter'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO10: Trace the course of the sperm and egg through the male and female reproductive tracts, respectively.",
+                question: "A couple undergoes an in vitro fertilization (IVF) workup. The reproductive endocrinologist extracts mature sperm directly from the highly coiled tubular structure located on the posterior aspect of the testis, where sperm are normally stored to complete their maturation. Which of the following is the correct anatomical term for this structure?",
+                options: {
+                    A: "Ductus deferens",
+                    B: "Ejaculatory duct",
+                    C: "Epididymis",
+                    D: "Rete testis",
+                    E: "Seminiferous tubule"
+                },
+                correctAnswer: "C",
+                rationale: "Sperm are produced in the seminiferous tubules, pass through the rete testis and efferent ductules, and are stored to mature in the long, coiled epididymis located on the posterior aspect of the testis. From the epididymis, they travel into the ductus (vas) deferens during ejaculation.",
+                source: "Pelvis PDF, Page 10: 'Sperm Production: a. Sperm form within the seminiferous tubules and are stored in the epididymis until mature (~2-3 months).'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO10: Trace the course of the sperm and egg through the male and female reproductive tracts, respectively.",
+                question: "During normal human fertilization, a sperm cell successfully penetrates an ovulated oocyte. This physiological event almost universally occurs in the widest and longest section of the uterine tube. Which of the following anatomical segments of the female reproductive tract is this?",
+                options: {
+                    A: "Ampulla",
+                    B: "Cervical canal",
+                    C: "Infundibulum",
+                    D: "Isthmus",
+                    E: "Uterine cavity"
+                },
+                correctAnswer: "A",
+                rationale: "After an oocyte is caught by the fimbriae of the infundibulum, it travels into the ampulla of the uterine (fallopian) tube. The ampulla is the widest and longest part of the tube, and it is the standard site where fertilization by a sperm cell occurs.",
+                source: "Pelvis PDF, Page 13: 'Ampulla – widest & longest part of tube; fertilization usually occurs here'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO11: Discuss the anatomical basis for and clinical presentation of: urinary infections, hemorrhoids, BPH, prostate cancer, ectopic pregnancy, pelvic organ prolapse.",
+                question: "A 50-year-old woman who is chronically constipated presents to the clinic with bright red rectal bleeding. She states that the bleeding is completely painless. Physical examination reveals swollen, dilated veins protruding just inside the anal orifice. Because these specific venous structures are anatomically located above the pectinate line, they lack somatic pain innervation. What is the most likely diagnosis?",
+                options: {
+                    A: "Anal fissure",
+                    B: "External hemorrhoids",
+                    C: "Internal hemorrhoids",
+                    D: "Rectocele",
+                    E: "Squamous cell carcinoma of the anus"
+                },
+                correctAnswer: "C",
+                rationale: "Internal hemorrhoids involve the internal rectal venous plexus above the pectinate line. Because they are located above the pectinate line, they are innervated by visceral afferent pain fibers (sensitive to stretch, but not sharp pain), making them characteristically painless, unlike external hemorrhoids which are below the line and somatically innervated (painful).",
+                source: "Pelvis PDF, Page 10: 'Internal hemorrhoids occur just inside the anus... Bleeding is characteristically bright red... Internal hemorrhoids are not painful & can be treated without anesthesia because they are above the pectinate line & thus innervated by visceral afferent pain fibers.'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO11: Discuss the anatomical basis for and clinical presentation of: urinary infections, hemorrhoids, BPH, prostate cancer, ectopic pregnancy, pelvic organ prolapse.",
+                question: "A 24-year-old woman presents to the emergency department with severe, sharp left lower quadrant abdominal pain and vaginal spotting. Her last menstrual period was 7 weeks ago. Ultrasound demonstrates an abnormally implanted embryo located in the most common site for ectopic gestation. If this pregnancy ruptures, severe hemorrhaging will immediately threaten the patient's life. This embryo is most likely implanted in which of the following structures?",
+                options: {
+                    A: "Cervical canal",
+                    B: "External surface of the ovary",
+                    C: "Fundus of the uterus",
+                    D: "Rectouterine pouch",
+                    E: "Uterine (fallopian) tube"
+                },
+                correctAnswer: "E",
+                rationale: "An ectopic pregnancy occurs when a fertilized egg implants outside the normal uterine cavity. The absolute most common site for this to occur is within the uterine (fallopian) tube (tubal pregnancy).",
+                source: "Pelvis PDF, Page 15: 'Clinical Note: An ectopic pregnancy occurs when a fertilized egg implants outside of the uterus; it is highly unlikely for the baby to survive. The most common site for abnormal implantation is the uterine tube (ectopic tubal pregnancy...)'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO12: Identify anatomical structures associated with the pelvis on X-Rays, MRI, and CT scans.",
+                question: "A 68-year-old man undergoes an MRI of the pelvis to stage a newly diagnosed prostate adenocarcinoma. The radiologist notes a distinct tumor mass located in the largest zone of the prostate gland, situated in its inferolateral and posterior aspects. This specific zone is highly visible on imaging and is anatomically continuous with the rectal wall, making it easily palpable on a digital rectal exam. Which of the following zones is the radiologist evaluating?",
+                options: {
+                    A: "Anterior fibromuscular stroma",
+                    B: "Central zone",
+                    C: "Peripheral zone",
+                    D: "Transitional zone",
+                    E: "Urethral zone"
+                },
+                correctAnswer: "C",
+                rationale: "The peripheral zone is the largest zone of the prostate (~70% of volume). It is located on the posterior and inferolateral aspects of the gland. It is the most common site for prostate cancer and is easily palpable on a digital rectal exam (and visible on MRI) due to its proximity to the rectum.",
+                source: "Pelvis PDF, Page 12: 'Peripheral zone – largest zone (~70% of prostate volume) located in the inferolateral and posterior aspects of the prostate gland; readily palpable on digital rectal examination and is the most common site for prostate cancer'"
+            },
+            {
+                section: "Pelvis",
+                fullLO: "LO12: Identify anatomical structures associated with the pelvis on X-Rays, MRI, and CT scans.",
+                question: "A 45-year-old man undergoes a CT scan of the pelvis. The radiologist identifies two paired, lobulated glands situated immediately posterior to the base of the bladder and superior to the prostate gland. These structures normally secrete a thick, alkaline, fructose-rich fluid directly into the ejaculatory ducts. What are these structures?",
+                options: {
+                    A: "Bulbourethral (Cowper) glands",
+                    B: "Epididymides",
+                    C: "Para-aortic lymph nodes",
+                    D: "Seminal vesicles",
+                    E: "Testes"
+                },
+                correctAnswer: "D",
+                rationale: "The seminal vesicles are paired glands located posterior to the bladder and superior to the prostate. They produce the bulk of the seminal fluid (fructose-rich, alkaline) and their ducts join the vas deferens to form the ejaculatory ducts.",
+                source: "Pelvis PDF, Page 11: 'Seminal Vesicles – paired glands that secrete seminal fluid (thick alkaline fluid with fructose and a coagulating agent) into the ejaculate 1. Lie posterior to the bladder, superior to the prostate gland, & inferior to the ureters'"
+            },
+
+            // --- Section 2: Tumors of the Bladder Collecting System ---
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO1: Identify the most common benign and malignant tumors.",
+                question: "A 65-year-old man with a long history of smoking presents with painless hematuria. Cystoscopy reveals an exophytic mass on the bladder wall. A biopsy is obtained and diagnosed as the absolute most common type of malignant tumor found in the urinary tract. This neoplasm accounts for approximately 7% of all new cancer cases in the United States. Which of the following is the most likely diagnosis?",
+                options: {
+                    A: "Adenocarcinoma of the bladder",
+                    B: "Papilloma",
+                    C: "Small cell carcinoma",
+                    D: "Squamous cell carcinoma",
+                    E: "Urothelial carcinoma"
+                },
+                correctAnswer: "E",
+                rationale: "Urothelial carcinoma (UC) is the most common primary malignant tumor of the lower urinary tract (bladder, ureters, renal pelvis), accounting for ~7% of new cancer cases in the US.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 7: 'Urothelial Carcinoma (UC) • Accounts for 7% of new cases; 4% mortality in USA'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO1: Identify the most common benign and malignant tumors.",
+                question: "A 40-year-old man undergoes cystoscopy for mild urinary symptoms. The urologist identifies a tiny (0.5 cm) exophytic mass projecting from the bladder mucosa. Histologic evaluation reveals a delicate fibrovascular core lined by entirely normal-appearing urothelium that is precisely 7 cell layers thick, lacking any cellular atypia. What is the appropriate classification for this completely benign tumor?",
+                options: {
+                    A: "Carcinoma in situ",
+                    B: "Flat urothelial dysplasia",
+                    C: "High-grade papillary urothelial carcinoma",
+                    D: "Low-grade papillary urothelial carcinoma",
+                    E: "Papilloma"
+                },
+                correctAnswer: "E",
+                rationale: "A Papilloma is a strictly benign, small (0.2-1.0 cm) papillary tumor. It has a fibrovascular core and is lined by completely normal urothelium that is exactly 7 cell layers thick.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 5: 'Papilloma • Benign • Small 0.2cm-1.0cm • Papillary fronds • Lined by 7 layers of cells • Fibrovascular core'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO2: Recognize the morphologic subtypes.",
+                question: "A 55-year-old male with hematuria undergoes a bladder biopsy. The pathologist evaluates the tissue under light microscopy and observes a perfectly flat (non-papillary) mucosal lesion. Despite lacking any architectural fronds, the cells comprising this flat lesion display marked, severe nuclear pleomorphism and atypia spanning the entire thickness of the epithelium. The basement membrane is completely intact. Which of the following is the correct morphologic diagnosis?",
+                options: {
+                    A: "Adenocarcinoma of the bladder",
+                    B: "Carcinoma in situ (CIS)",
+                    C: "Flat urothelial dysplasia",
+                    D: "Low-grade papillary urothelial carcinoma",
+                    E: "Papilloma"
+                },
+                correctAnswer: "B",
+                rationale: "Carcinoma in situ (CIS) is a flat, non-invasive morphologic subtype of urothelial carcinoma. It is defined by the presence of severe nuclear atypia (pleomorphism) within a flat epithelium that lacks papillary structures, without breaching the basement membrane.",
+                source: "Tumors of the Bladder Collecting System PDF, Slides 4 & 14: 'Urothelial tumors • Flat – Flat urothelial dysplasia – Carcinoma in situ (CIS)' AND '[Image showing flat epithelium]: FLAT Carcinoma in situ (CIS)... Note marked nuclear atypia'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO2: Recognize the morphologic subtypes.",
+                question: "A 60-year-old man originally from Egypt presents with a massive, invasive bladder tumor. His medical history is significant for chronic infection with Schistosoma haematobium. Biopsy of the bladder mass reveals invasive sheets of neoplastic cells with prominent intercellular bridges and keratin pearls. Which of the following morphologic subtypes of bladder cancer does this patient most likely have?",
+                options: {
+                    A: "Adenocarcinoma",
+                    B: "Carcinoma in situ",
+                    C: "Papillary urothelial carcinoma",
+                    D: "Small cell carcinoma",
+                    E: "Squamous cell carcinoma"
+                },
+                correctAnswer: "E",
+                rationale: "Squamous cell carcinoma of the bladder is a rare morphologic variant (~5% of bladder tumors) heavily associated with chronic irritation. A classic, highly tested risk factor is Schistosomiasis infection, which is endemic to regions like Egypt and West Africa.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 17: 'Squamous cell carcinoma of bladder • Rare: 5% of bladder tumors • People at risk include those with: • Chronic irritation of bladder mucosa... • Schistosomiasis • West Africa, Egypt'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO2: Recognize the morphologic subtypes.",
+                question: "A 45-year-old man presents with hematuria. Cystoscopy reveals a malignant tumor uniquely located at the dome of the bladder. The pathology report describes an invasive tumor composed of malignant glands. The physician recalls that this extremely rare morphologic subtype of bladder cancer often arises from a specific embryonic remnant located at this anatomical site. Which of the following is the most likely origin of this tumor?",
+                options: {
+                    A: "Anal valves",
+                    B: "Mesonephric duct",
+                    C: "Urachal remnant",
+                    D: "Ureteric bud",
+                    E: "Urothelium of the trigone"
+                },
+                correctAnswer: "C",
+                rationale: "Adenocarcinoma of the bladder is extremely rare (<2% of cases) and is generally divided into two major categories: those arising from the bladder proper, and those arising from a urachal remnant (which typically present at the dome of the bladder).",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 18: 'Adenocarcinoma of the bladder • Extremely rare: <2% of all bladder cancers • 2 major categories: • Urachal • Bladder proper'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO3: Recognize the risk factors associated with malignant tumors.",
+                question: "A 50-year-old paraplegic patient who has required a chronic indwelling urinary catheter for the past 15 years presents with gross hematuria. Cystoscopy reveals a large, fungating mass in the bladder. This patient's specific risk factor—chronic mucosal irritation from a catheter—most strongly predisposes him to which of the following morphologic subtypes of bladder cancer?",
+                options: {
+                    A: "Adenocarcinoma",
+                    B: "Clear cell carcinoma",
+                    C: "Papilloma",
+                    D: "Small cell carcinoma",
+                    E: "Squamous cell carcinoma"
+                },
+                correctAnswer: "E",
+                rationale: "Squamous cell carcinoma of the bladder is intimately linked to chronic irritation of the bladder mucosa. Major risk factors include chronic indwelling catheters, paraplegia, neurogenic bladder, bladder stones, and schistosomiasis.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 17: 'Squamous cell carcinoma of bladder... People at risk include those with: • Chronic irritation of bladder mucosa • Chronic indwelling catheters • Paraplegics • Neurogenic bladder'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO3: Recognize the risk factors associated with malignant tumors.",
+                question: "A 70-year-old man is diagnosed with urothelial carcinoma of the bladder. During a detailed clinical interview to ascertain potential etiologies, the physician discovers that the patient spent 40 years working in a specific industrial manufacturing environment. Occupational exposure to which of the following substances represents a well-established, major risk factor for developing this specific cancer?",
+                options: {
+                    A: "Asbestos in insulation",
+                    B: "Aromatic amines in the dye industry",
+                    C: "Benzene in gasoline production",
+                    D: "Silica dust in mining",
+                    E: "Ultraviolet radiation in farming"
+                },
+                correctAnswer: "B",
+                rationale: "Occupational exposure to aromatic amines (such as benzidine or 1- or 2-naphthylamine), which are heavily used in the dye and leather industries, is a classic and potent risk factor for developing urothelial carcinoma.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 9: 'Urothelial Carcinoma • Risk factors... Occupation • Exposure to aromatic amines in dye industry • Benzidine, 1- or 2-naphthylamine'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO3: Recognize the risk factors associated with malignant tumors.",
+                question: "A public health researcher is compiling a statistical database on the modifiable behavioral risk factors associated with genitourinary malignancies. Which of the following lifestyle habits is recognized as increasing a patient's risk of developing urothelial carcinoma by 3 to 7 fold?",
+                options: {
+                    A: "Chronic alcohol consumption",
+                    B: "High-protein dietary intake",
+                    C: "Intravenous drug use",
+                    D: "Sedentary lifestyle",
+                    E: "Smoking cigarettes"
+                },
+                correctAnswer: "E",
+                rationale: "Cigarette smoking is the most significant modifiable lifestyle risk factor for urothelial carcinoma, increasing the risk by 3 to 7 fold depending on duration and quantity.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 9: 'Urothelial Carcinoma • Risk factors: • Smoking 3-7 fold ↑ risk • Longer duration of smoking (60 yrs or >) • Number of cigarettes/day'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO4: Recognize the most common cytogenetic abnormalities.",
+                question: "A 55-year-old woman has a bladder tumor resected. The pathology report confirms a low-grade, non-invasive papillary urothelial carcinoma. Molecular genetic profiling of this tumor tissue is performed to guide future targeted therapies. The tumor cells are most likely to harbor a mutation in which of the following specific genes?",
+                options: {
+                    A: "APC",
+                    B: "BRCA1",
+                    C: "FGFR3",
+                    D: "PTEN",
+                    E: "RB"
+                },
+                correctAnswer: "C",
+                rationale: "Low-grade non-invasive papillary urothelial carcinomas (PUC) are heavily associated with mutations in the fibroblast growth factor receptor 3 (FGFR3) gene, occurring in 60-80% of cases.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 13: 'Papillary Urothelial Carcinoma Low Grade PUC • Major genes implicated in LG non-invasive PUC: • Mutations in fibroblast growth factor receptor 3 (FGFR3) gene: 60 – 80%.'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO4: Recognize the most common cytogenetic abnormalities.",
+                question: "A 75-year-old man presents with gross hematuria. Cystoscopy and subsequent biopsy reveal a high-grade papillary urothelial carcinoma characterized by marked nuclear pleomorphism and high mitotic activity. Unlike low-grade tumors, this highly aggressive malignancy is most heavily driven by mutations in which of the following tumor suppressor genes?",
+                options: {
+                    A: "BCL2",
+                    B: "FGFR3",
+                    C: "H-Ras",
+                    D: "MYC",
+                    E: "TP53"
+                },
+                correctAnswer: "E",
+                rationale: "High-grade non-invasive papillary urothelial carcinomas have a distinct molecular profile compared to low-grade tumors. They are classically driven by mutations in major tumor suppressor genes, specifically TP53 and RB.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 13: 'High Grade PUC • Major genes implicated in HG non-invasive PUC: • Mutations in INK4 gene • 9q deletion • Mutations in TP53 • Deletions of RB gene'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO5: Recognize their behavior and prognosis.",
+                question: "A 62-year-old man undergoes transurethral resection of a bladder tumor (TURB) for a newly diagnosed non-invasive urothelial neoplasm. Following the surgery, his urologist strongly advises enrollment in a strict surveillance program utilizing regular cystoscopies. The physician correctly justifies this rigorous follow-up by explaining that what percentage of these non-invasive tumors are expected to recur?",
+                options: {
+                    A: "Less than 5%",
+                    B: "10%",
+                    C: "25%",
+                    D: "70%",
+                    E: "Greater than 95%"
+                },
+                correctAnswer: "D",
+                rationale: "Non-invasive urothelial tumors (both low and high-grade) have an exceptionally high propensity for recurrence, with roughly 70% of them recurring after initial treatment. This necessitates strict surveillance.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 21: 'Prognosis of Urothelial Carcinoma • 70% of non-invasive tumors recur (both low- and high-grade UCs)'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO5: Recognize their behavior and prognosis.",
+                question: "A 68-year-old woman is diagnosed with invasive urothelial carcinoma of the bladder. She undergoes a radical cystectomy. The pathology report details the depth of tumor penetration into the muscularis propria and the perivesical adipose tissue. In assessing this patient's long-term survival and overall prognosis, which of the following factors is the absolute most critical determinant?",
+                options: {
+                    A: "Age at diagnosis",
+                    B: "Biological sex",
+                    C: "History of tobacco use",
+                    D: "Presence of concurrent papillomas",
+                    E: "Tumor stage (depth of invasion and metastasis)"
+                },
+                correctAnswer: "E",
+                rationale: "For invasive urothelial carcinomas, the single most critical determinant of prognosis is the tumor stage (pTNM), which measures the depth of invasion into the bladder wall (e.g., lamina propria vs muscularis propria) and the presence of regional or distant metastasis.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 21: 'Invasive tumors have a poor prognosis • Prognosis is related to the depth of invasion into the bladder wall and the presence or absence of metastatic disease (TUMOR STAGE)'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO5: Recognize their behavior and prognosis.",
+                question: "A pathologist reviews a biopsy from a highly aggressive bladder tumor. Microscopic examination shows sheets and nests of cells with scant cytoplasm, stippled chromatin, and inconspicuous nucleoli. The pathologist notes that this rare tumor is commonly seen in combination with urothelial carcinoma. What is the most accurate description of this tumor's clinical behavior?",
+                options: {
+                    A: "It exhibits highly indolent growth.",
+                    B: "It is highly aggressive.",
+                    C: "It rarely invades the lamina propria.",
+                    D: "It typically resolves completely with intravesical BCG.",
+                    E: "It uniquely responds to hormone deprivation therapy."
+                },
+                correctAnswer: "B",
+                rationale: "Small cell carcinoma of the bladder is morphologically similar to small cell carcinoma of the lung (scant cytoplasm, stippled chromatin). It is commonly seen combined with urothelial carcinoma and is characterized by a highly aggressive clinical course.",
+                source: "Tumors of the Bladder Collecting System PDF, Slide 19: 'Small cell carcinoma • Commonly seen in combination with urothelial carcinoma • Similar to small cell carcinoma of lung • Sheets and nests of cells with scant cytoplasm, stippled chromatin and inconspicuous nucleoli • Highly aggressive'"
+            },
+
+            // --- Section 3: Urinary Tract Infections ---
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO1: Describe differences in presentation and management of complicated and uncomplicated urinary tract infections along with cystitis and pyelonephritis.",
+                question: "A 24-year-old healthy female presents to the urgent care clinic complaining of a 2-day history of painful urination (dysuria), increased urinary frequency, and a strong urge to urinate. She denies any fevers, chills, nausea, or back pain. Her physical exam is remarkable only for suprapubic tenderness. Which of the following is the most accurate clinical diagnosis for this patient's specific presentation?",
+                options: {
+                    A: "Asymptomatic bacteriuria",
+                    B: "Complicated urinary tract infection",
+                    C: "Cystitis",
+                    D: "Pyelonephritis",
+                    E: "Vaginitis"
+                },
+                correctAnswer: "C",
+                rationale: "The patient has symptoms entirely localized to the bladder (dysuria, urgency, frequency) without any systemic signs of infection (no fever, no toxic appearance) or flank pain. This localized presentation precisely defines cystitis (infection of the bladder).",
+                source: "Urinary Tract Infections Handout PDF, Page 1; Urinary Tract Infections Slide Deck PDF, Slide 41: 'Definitions: • Cystitis: infection of the bladder... Symptoms: • Dysuria • Urgency • Frequency • Hematuria' AND 'Important Points... 5. Cystitis is localized, pyelo has more systemic symptoms'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO1: Describe differences in presentation and management of complicated and uncomplicated urinary tract infections along with cystitis and pyelonephritis.",
+                question: "A 45-year-old woman presents to the emergency department with fever, chills, and severe left-sided flank pain. She appears toxic. A urinalysis reveals an alkaline pH. A subsequent urine culture grows a urease-producing Gram-negative organism (Proteus). Due to this specific organism's unique enzymatic activity, this patient is at highest risk for developing which of the following complications?",
+                options: {
+                    A: "Aortic aneurysm",
+                    B: "Fistula formation",
+                    C: "Squamous cell carcinoma",
+                    D: "Struvite kidney stones",
+                    E: "Urachal cyst"
+                },
+                correctAnswer: "D",
+                rationale: "The patient's presentation (fever, chills, flank pain, toxic appearance) is classic for pyelonephritis (kidney infection). The presence of Proteus, which produces urease, hydrolyzes urea to NH4 and CO2, increasing the urine pH. This strongly predisposes the patient to the formation of struvite kidney stones.",
+                source: "Urinary Tract Infections Handout PDF, Page 1; Urinary Tract Infections Slide Deck PDF, Slide 41: 'Pyelonephritis: infection of the kidneys | Symptoms: Flank pain, “Toxic” appearing, Systemic signs of infection' AND 'Important Points... 6. Proteus urease hydrolyzes urea to NH4 + CO2 -> increased risk for struvite stones (look for increased pH on UA)'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO1: Describe differences in presentation and management of complicated and uncomplicated urinary tract infections along with cystitis and pyelonephritis.",
+                question: "A 55-year-old man presents to the clinic with a 3-day history of dysuria and urinary frequency. He is otherwise completely healthy, takes no medications, and has no prior history of urinary symptoms. Based on this information, standard infectious disease guidelines dictate that his urinary tract infection must be clinically classified as:",
+                options: {
+                    A: "Asymptomatic bacteriuria",
+                    B: "Colonization",
+                    C: "Complicated",
+                    D: "Pyelonephritis",
+                    E: "Uncomplicated"
+                },
+                correctAnswer: "C",
+                rationale: "Urinary tract infections in males are inherently classified as complicated UTIs due to anatomical differences (longer urethra) and the higher likelihood of underlying structural issues or prostatic involvement. Other complicated factors include structural abnormalities, immunosuppression, catheters, and foreign bodies.",
+                source: "Urinary Tract Infections Slide Deck PDF, Slide 9: 'Complicated UTI [Diagram includes:] Structural abnormalities, Immunosuppression, Catheters, Foreign bodies, Male sex'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO2: Discuss utilization and limitations of diagnostic tests for urinary tract infections.",
+                question: "A 72-year-old woman residing in a nursing home becomes acutely confused and agitated. A nurse practitioner orders a urinalysis, hoping to rapidly diagnose a urinary tract infection to explain the altered mental status. The urinalysis returns completely negative for leukocyte esterase and nitrites, and shows no white blood cells (no pyuria). According to current clinical guidelines, what is the most appropriate interpretation of this specific \"clean\" urinalysis result?",
+                options: {
+                    A: "It definitively confirms asymptomatic bacteriuria.",
+                    B: "It definitively diagnoses a viral cystitis.",
+                    C: "It proves the urine sample was contaminated.",
+                    D: "It reliably rules out a urinary tract infection.",
+                    E: "It signifies the presence of a multidrug-resistant organism."
+                },
+                correctAnswer: "D",
+                rationale: "A urinalysis (UA) is highly sensitive but poorly specific. While a \"dirty\" UA with multiple positives does not definitively diagnose an infection, a completely \"clean\" UA (no pyuria, no LE, no nitrites) is highly sensitive for ruling out a urinary tract infection.",
+                source: "Urinary Tract Infections Slide Deck PDF, Slides 17 & 42: 'Urinalysis Summary [Up arrow:] Some components are highly sensitive (good rule out test) [Down arrow:] Even with multiple positives, is not diagnostic' AND 'Common Pitfalls • “Dirty UA” → remember it is used to rule out infection'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO2: Discuss utilization and limitations of diagnostic tests for urinary tract infections.",
+                question: "A 30-year-old woman submits a urine sample for evaluation of dysuria. The laboratory reports the presence of leukocyte esterase, 15 white blood cells per high-power field, and a massive amount of squamous epithelial cells. How should the physician interpret the presence of these squamous epithelial cells in the diagnostic workup?",
+                options: {
+                    A: "They indicate a high probability of pyelonephritis.",
+                    B: "They indicate severe bladder mucosal inflammation.",
+                    C: "They indicate the sample was improperly collected and contaminated.",
+                    D: "They represent the primary host defense mechanism actively shedding bacteria.",
+                    E: "They strongly suggest a fungal infection (Candiduria)."
+                },
+                correctAnswer: "C",
+                rationale: "In a urinalysis, the presence of squamous epithelial cells indicates that the sample is primarily composed of or heavily mixed with vaginal/skin flora (saliva/skin depending on site) rather than pure bladder urine. It signifies contamination and an improperly collected \"clean catch\" sample.",
+                source: "Urinary Tract Infections Handout PDF, Page 2; Urinary Tract Infections Slide Deck PDF, Slide 14: 'Diagnosis: [Table] Finding: Squamous cells | Significance: Contamination' AND 'Bacteriuria ≠ Infection... Contamination – improperly collected sample'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO3: Summarize the epidemiology and treatment strategies of urinary tract infections with varying presentations and risk factors.",
+                question: "A 28-year-old woman is diagnosed with uncomplicated outpatient cystitis. The physician decides to prescribe a first-line antibiotic that perfectly targets the most common enteric Gram-negative organisms responsible for this condition, is not impacted by cross-resistance, and is taken for exactly 5 days. Which of the following is the most appropriate pharmacotherapy?",
+                options: {
+                    A: "Cefepime",
+                    B: "Ceftriaxone",
+                    C: "Ciprofloxacin",
+                    D: "Fosfomycin",
+                    E: "Nitrofurantoin"
+                },
+                correctAnswer: "E",
+                rationale: "Nitrofurantoin is a first-line agent for uncomplicated cystitis. It targets common Gram-negative enteric organisms, is not impacted by typical cross-resistance mechanisms, and the standard duration of therapy is precisely 5 days. (Fosfomycin is 1 dose; fluoroquinolones like ciprofloxacin are no longer first-line due to adverse events).",
+                source: "Urinary Tract Infections Handout PDF, Page 1; Urinary Tract Infections Slide Deck PDF, Slide 32: 'Treatment & Duration... Nitrofurantoin x 5 days' AND 'Notes on Common Therapies: Nitrofurantoin • Cystitis only • Not impacted by cross-resistance'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO3: Summarize the epidemiology and treatment strategies of urinary tract infections with varying presentations and risk factors.",
+                question: "An 85-year-old man with severe dementia is brought to the clinic because his caregivers note his urine smells unusually foul and he has been exceptionally lethargic. He has no fever, flank pain, dysuria, or suprapubic tenderness. A urine culture grows >100,000 CFU of E. coli. What is the most appropriate evidence-based management for this patient's condition?",
+                options: {
+                    A: "Immediate admission for intravenous Cefepime",
+                    B: "Oral Ciprofloxacin for 7 days",
+                    C: "Oral Nitrofurantoin for 5 days",
+                    D: "Observation without antimicrobial therapy",
+                    E: "Single dose of intravenous Aminoglycoside"
+                },
+                correctAnswer: "D",
+                rationale: "The patient has Asymptomatic Bacteriuria (ASB). Malodorous urine, altered mental status (lethargy), and falls are not reliable symptoms of a true urinary tract infection. In the absence of systemic signs (fever) or focal urinary symptoms, a positive culture in an elderly patient indicates colonization. ASB does not require antimicrobial therapy (unless pregnant or undergoing invasive urologic procedures). Treating it creates a self-fulfilling prophecy of resistance.",
+                source: "Urinary Tract Infections Slide Deck PDF, Slides 19 & 42: 'Asymptomatic Bacteriuria (ASB) • Refers to genitourinary symptoms – Falls, seizures, and altered mental status are not considered symptoms of urinary tract infections... • Does not require antimicrobial therapy' AND 'Common Pitfalls... “malodorous urine” → not a sign of infection'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO4: Discuss evidence-based preventative practices to reduce the recurrence of urinary tract infections.",
+                question: "A 68-year-old postmenopausal woman presents to her primary care physician complaining of recurrent urinary tract infections (she has had 4 in the past year). She is seeking a non-antibiotic preventative strategy. Thirty randomized controlled trials support a specific intervention that restores Lactobacillus colonies and normalizes vaginal pH in women of her age group. Which of the following is the most appropriate preventative recommendation?",
+                options: {
+                    A: "Daily oral probiotic supplements",
+                    B: "Decreased daily water intake",
+                    C: "High-dose Cranberry proanthocyanidin extract",
+                    D: "Postcoital Trimethoprim-sulfamethoxazole",
+                    E: "Vaginal estrogen rings, inserts, or creams"
+                },
+                correctAnswer: "E",
+                rationale: "In postmenopausal women, the loss of estrogen alters the vaginal flora, increasing the pH and wiping out protective Lactobacillus species. Topical estrogen therapy (rings, inserts, creams) has strong evidence (30 RCTs) demonstrating efficacy in restoring the normal flora, lowering the pH, and significantly reducing recurrent UTIs.",
+                source: "Urinary Tract Infections Handout PDF, Page 3; Urinary Tract Infections Slide Deck PDF, Slide 40: 'Prevention [Table] Strategy: Estrogen | Intervention: Rings, inserts, or creams | Comments: 30 RCTs demonstrate efficacy or reducing recurrent UTIs post-menopause. Change in pH restores Lactobacillus colonies and normal vaginal flora'"
+            },
+            {
+                section: "Urinary Tract Infections",
+                fullLO: "LO4: Discuss evidence-based preventative practices to reduce the recurrence of urinary tract infections.",
+                question: "A 25-year-old newly married woman experiences her third episode of cystitis in six months. She consistently notes that her symptoms begin 24 to 48 hours after sexual intercourse. To definitively prevent these specific recurrences, her physician discusses a strategy utilizing antimicrobials. Which of the following represents the most appropriate, targeted implementation of this strategy?",
+                options: {
+                    A: "Continuous daily dosing of Cefdinir",
+                    B: "Postcoital dosing of Nitrofurantoin",
+                    C: "Precoital dosing of Moxifloxacin",
+                    D: "Single monthly dose of Fosfomycin",
+                    E: "Weekly dosing of intravenous Ceftriaxone"
+                },
+                correctAnswer: "B",
+                rationale: "For women whose recurrent UTIs are clearly temporally linked to sexual intercourse, postcoital antibiotic prophylaxis is an effective preventative strategy. Validated options for this strategy include TMP/SMX, Nitrofurantoin, and Ciprofloxacin. (Cefdinir and Moxifloxacin are explicitly listed as antibiotics to avoid for UTI due to poor bioavailability or zero urinary penetration).",
+                source: "Urinary Tract Infections Handout PDF, Page 3; Urinary Tract Infections Slide Deck PDF, Slide 40: 'Prevention [Table] Strategy: Continuous or postcoital antibiotics | Intervention: TMP/SMX, Nitrofurantoin, Ciprofloxacin | Comments: Consider risk/benefit with resistance and ADEs. Dependent on timing'"
+            }
+        ];
+
+        // --- Core Logic ---
+        const quizRoot = document.getElementById('quiz-root');
+        const themeSelect = document.getElementById('theme-select');
+        const pinBtn = document.getElementById('pin-btn');
+        const mainHeader = document.getElementById('main-header');
+        const sectionNav = document.getElementById('section-nav');
+        const customBuilder = document.getElementById('custom-builder');
+        const rootElements = document.documentElement;
+
+        let isRevealed = false;
+
+        function toggleAllLOs() {
+            isRevealed = !isRevealed;
+            const btn = document.getElementById('reveal-all-btn');
+            btn.textContent = isRevealed ? "Hide Learning Objectives" : "Show Learning Objectives";
+            
+            document.querySelectorAll('.lo-box').forEach(box => {
+                box.style.display = isRevealed ? 'block' : 'none';
+            });
+        }
+
+        function initQuiz() {
+            let currentSection = "";
+            let sectionIndex = 0;
+            
+            quizData.forEach((item, index) => {
+                if (item.section !== currentSection) {
+                    currentSection = item.section;
+                    
+                    const sectionId = 'sec-' + sectionIndex;
+                    
+                    const sectionHeader = document.createElement('h2');
+                    sectionHeader.className = 'section-header';
+                    sectionHeader.id = sectionId;
+                    sectionHeader.textContent = currentSection;
+                    quizRoot.appendChild(sectionHeader);
+
+                    const navBtn = document.createElement('button');
+                    let btnText = currentSection;
+                    if (btnText.includes("Pelvis")) btnText = "Pelvis";
+                    if (btnText.includes("Tumors of the Bladder Collecting System")) btnText = "Bladder Tumors";
+                    if (btnText.includes("Urinary Tract Infections")) btnText = "UTIs";
+                    
+                    navBtn.textContent = btnText;
+                    navBtn.onclick = () => {
+                        document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+                    };
+                    sectionNav.appendChild(navBtn);
+
+                    sectionIndex++;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `q-card-${index}`;
+
+                const loBox = document.createElement('div');
+                loBox.className = 'lo-box';
+                loBox.id = `lo-${index}`;
+                loBox.innerHTML = item.fullLO;
+                card.appendChild(loBox);
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                qText.innerHTML = `${index + 1}. ${item.question}`;
+                card.appendChild(qText);
+
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'options-grid';
+
+                for (const[key, value] of Object.entries(item.options)) {
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question-${index}`;
+                    input.value = key;
+
+                    const span = document.createElement('span');
+                    span.innerHTML = `${key}. ${value}`;
+
+                    label.appendChild(input);
+                    label.appendChild(span);
+                    optionsGrid.appendChild(label);
+                }
+                card.appendChild(optionsGrid);
+
+                const btn = document.createElement('button');
+                btn.className = 'btn-check';
+                btn.textContent = 'Check Answer';
+                btn.onclick = () => checkAnswer(index);
+                card.appendChild(btn);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                feedback.id = `feedback-${index}`;
+                card.appendChild(feedback);
+
+                quizRoot.appendChild(card);
+            });
+
+            const returnContainer = document.createElement('div');
+            returnContainer.style.textAlign = 'center';
+            returnContainer.style.marginTop = '2rem';
+            
+            const returnBtn = document.createElement('a');
+            returnBtn.href = 'https://ibecerramcg.github.io/GI-GU-ENDO-Practice-Quizzes/';
+            returnBtn.className = 'btn-link';
+            returnBtn.textContent = '← Return to Quiz Directory';
+            
+            returnContainer.appendChild(returnBtn);
+            quizRoot.appendChild(returnContainer);
+
+            const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+            themeSelect.value = savedTheme;
+            changeTheme(savedTheme);
+
+            const savedPinState = localStorage.getItem('headerPinned');
+            toggleHeader(savedPinState !== 'false');
+        }
+
+        function checkAnswer(index) {
+            const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+            const feedbackEl = document.getElementById(`feedback-${index}`);
+            const data = quizData[index];
+
+            if (!selected) {
+                alert("Please select an answer.");
+                return;
+            }
+
+            const isCorrect = selected.value === data.correctAnswer;
+            
+            let html = `<span class="feedback-header">${isCorrect ? "Correct!" : "Incorrect"}</span>`;
+            if (!isCorrect) {
+                html += `<div>The correct answer is <strong>${data.correctAnswer}</strong>.</div>`;
+            }
+            
+            html += `<div class="rationale"><strong>Rationale:</strong> ${data.rationale}</div>`;
+            html += `<div class="source"><strong>Source:</strong> ${data.source}</div>`;
+
+            feedbackEl.innerHTML = html;
+            feedbackEl.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackEl.style.display = 'block';
+        }
+
+        function changeTheme(themeName) {
+            localStorage.setItem('quizTheme', themeName);
+            
+            if (themeName === 'custom') {
+                rootElements.removeAttribute('data-theme');
+                customBuilder.classList.add('active');
+                loadCustomTheme();
+            } else {
+                rootElements.setAttribute('data-theme', themeName);
+                customBuilder.classList.remove('active');
+                rootElements.removeAttribute('style');
+            }
+        }
+
+        function updateCustomTheme() {
+            const bg = document.getElementById('color-bg').value;
+            const card = document.getElementById('color-card').value;
+            const text = document.getElementById('color-text').value;
+            const accent = document.getElementById('color-accent').value;
+
+            rootElements.style.setProperty('--bg-body', bg);
+            rootElements.style.setProperty('--bg-header', bg);
+            rootElements.style.setProperty('--bg-card', card);
+            rootElements.style.setProperty('--highlight-bg', card);
+            rootElements.style.setProperty('--text-main', text);
+            rootElements.style.setProperty('--text-accent', accent);
+            rootElements.style.setProperty('--button-bg', accent);
+            rootElements.style.setProperty('--button-text', bg);
+            rootElements.style.setProperty('--border-color', accent + '40');
+
+            const customColors = { bg, card, text, accent };
+            localStorage.setItem('customThemeColors', JSON.stringify(customColors));
+        }
+
+        function loadCustomTheme() {
+            const savedColors = JSON.parse(localStorage.getItem('customThemeColors'));
+            if (savedColors) {
+                document.getElementById('color-bg').value = savedColors.bg;
+                document.getElementById('color-card').value = savedColors.card;
+                document.getElementById('color-text').value = savedColors.text;
+                document.getElementById('color-accent').value = savedColors.accent;
+                updateCustomTheme();
+            } else {
+                updateCustomTheme();
+            }
+        }
+
+        function toggleHeader(forceState) {
+            const isCurrentlyPinned = !mainHeader.classList.contains('unpinned');
+            const newState = (typeof forceState === 'boolean') ? forceState : !isCurrentlyPinned;
+
+            if (newState) {
+                mainHeader.classList.remove('unpinned');
+                pinBtn.classList.add('pin-active');
+                localStorage.setItem('headerPinned', 'true');
+            } else {
+                mainHeader.classList.add('unpinned');
+                pinBtn.classList.remove('pin-active');
+                localStorage.setItem('headerPinned', 'false');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initQuiz);
+
+    </script>
+</body>
+</html>
