@@ -18,52 +18,40 @@
             --feedback-error-bg: #7f1d1d;
             --feedback-error-border: #dc2626;
             --feedback-error-text: #fecaca;
-        }
-
-        [data-theme="dark"] {
+        }[data-theme="dark"] {
             --bg-body: #1e293b; --bg-card: #334155; --bg-header: #0f172a;
             --text-main: #f1f5f9; --text-muted: #94a3b8; --text-accent: #38bdf8;
             --border-color: #475569; --highlight-bg: #475569;
             --button-bg: #38bdf8; --button-text: #0f172a; --button-hover: #0ea5e9;
-        }
-
-        [data-theme="light"] {
+        }[data-theme="light"] {
             --bg-body: #f3f4f6; --bg-card: #ffffff; --bg-header: #ffffff;
             --text-main: #1f2937; --text-muted: #6b7280; --text-accent: #2563eb;
             --border-color: #e5e7eb; --highlight-bg: #f3f4f6;
             --button-bg: #2563eb; --button-text: #ffffff; --button-hover: #1d4ed8;
             --feedback-success-bg: #ecfdf5; --feedback-success-border: #34d399; --feedback-success-text: #065f46;
             --feedback-error-bg: #fef2f2; --feedback-error-border: #f87171; --feedback-error-text: #991b1b;
-        }
-
-        [data-theme="midnight"] {
+        }[data-theme="midnight"] {
             --bg-body: #000000; --bg-card: #000000; --bg-header: #000000;
             --text-main: #e0e0e0; --text-muted: #888888; --text-accent: #90caf9;
             --border-color: #333333; --highlight-bg: #1a1a1a;
             --button-bg: #90caf9; --button-text: #000000; --button-hover: #42a5f5;
             --feedback-success-bg: #051b11; --feedback-success-border: #0f5132; --feedback-success-text: #75b798;
             --feedback-error-bg: #2c0b0e; --feedback-error-border: #842029; --feedback-error-text: #ea868f;
-        }
-
-        [data-theme="legacy-dark"] {
+        }[data-theme="legacy-dark"] {
             --bg-body: #2d343e; --bg-card: #3c424f; --bg-header: #3c424f;
             --text-main: #e8e6e3; --text-muted: #b0c4de; --text-accent: #8ab4f8;
             --border-color: #555; --highlight-bg: #454c5a;
             --button-bg: #8ab4f8; --button-text: #202124; --button-hover: #a3c5f9;
             --feedback-success-bg: #344e41; --feedback-success-border: #52b788; --feedback-success-text: #c7f9cc;
             --feedback-error-bg: #5e2129; --feedback-error-border: #a4133c; --feedback-error-text: #f8d7da;
-        }
-
-        [data-theme="sepia"] {
+        }[data-theme="sepia"] {
             --bg-body: #f4ecd8; --bg-card: #fdf6e3; --bg-header: #e4d5b7;
             --text-main: #433422; --text-muted: #7c6f5a; --text-accent: #a05a2c;
             --border-color: #d3c4a5; --highlight-bg: #ebe1c9;
             --button-bg: #a05a2c; --button-text: #fdf6e3; --button-hover: #864822;
             --feedback-success-bg: #e6f4ea; --feedback-success-border: #8ab893; --feedback-success-text: #2e4c35;
             --feedback-error-bg: #f9e3e3; --feedback-error-border: #d48f8f; --feedback-error-text: #5c2b2b;
-        }
-
-        [data-theme="contrast"] {
+        }[data-theme="contrast"] {
             --bg-body: #000000; --bg-card: #000000; --bg-header: #000000;
             --text-main: #ffffff; --text-muted: #dddddd; --text-accent: #ffff00;
             --border-color: #ffffff; --highlight-bg: #333333;
@@ -798,6 +786,21 @@
             },
             {
                 section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO1: Identify the most common benign and malignant tumors.",
+                question: "A 68-year-old man presents for a routine check-up. Digital rectal exam reveals a hard, irregular nodule on the posterior aspect of the prostate gland. A biopsy confirms the most common visceral malignancy in men. In which of the following anatomical zones did this malignant tumor most likely originate?",
+                options: {
+                    A: "Anterior fibromuscular stroma",
+                    B: "Central zone",
+                    C: "Peripheral zone",
+                    D: "Transitional zone",
+                    E: "Ureteral zone"
+                },
+                correctAnswer: "C",
+                rationale: "Carcinoma of the prostate is the most common visceral malignancy in men. It characteristically arises in the peripheral zone of the gland, making it palpable on a digital rectal exam (unlike benign prostatic hyperplasia, which arises in the inner transition zone near the urethra and causes obstructive symptoms).",
+                source: "Tumors of the Bladder Collecting System and Prostate PDF, Slides 29 & 34: 'Carcinoma of the Prostate • Most common visceral malignancy in men' AND 'Carcinoma of the prostate arises in the peripheral zone'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
                 fullLO: "LO2: Recognize the morphologic subtypes.",
                 question: "A 55-year-old male with hematuria undergoes a bladder biopsy. The pathologist evaluates the tissue under light microscopy and observes a perfectly flat (non-papillary) mucosal lesion. Despite lacking any architectural fronds, the cells comprising this flat lesion display marked, severe nuclear pleomorphism and atypia spanning the entire thickness of the epithelium. The basement membrane is completely intact. Which of the following is the correct morphologic diagnosis?",
                 options: {
@@ -840,6 +843,21 @@
                 correctAnswer: "C",
                 rationale: "Adenocarcinoma of the bladder is extremely rare (<2% of cases) and is generally divided into two major categories: those arising from the bladder proper, and those arising from a urachal remnant (which typically present at the dome of the bladder).",
                 source: "Tumors of the Bladder Collecting System PDF, Slide 18: 'Adenocarcinoma of the bladder • Extremely rare: <2% of all bladder cancers • 2 major categories: • Urachal • Bladder proper'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO2: Recognize the morphologic subtypes.",
+                question: "A 72-year-old man is diagnosed with prostate adenocarcinoma. The pathologist determines the Gleason score by evaluating the microscopic architecture of the tumor to classify its morphologic grade. The primary pattern consists of fused glands, and the secondary pattern consists of solid sheets of cells. Which of the following is the correct Gleason score for this poorly differentiated tumor?",
+                options: {
+                    A: "3 + 3 = 6",
+                    B: "3 + 4 = 7",
+                    C: "4 + 3 = 7",
+                    D: "4 + 4 = 8",
+                    E: "4 + 5 = 9"
+                },
+                correctAnswer: "E",
+                rationale: "The Gleason grading system classifies the morphologic patterns of prostate cancer. The score is the sum of the primary (most predominant) pattern and the secondary pattern. Pattern 3 is individual discrete glands; Pattern 4 is fused/cribriform glands; Pattern 5 is solid sheets lacking gland formation. A tumor with a primary pattern of fused glands (4) and secondary pattern of solid sheets (5) has a Gleason score of 4+5=9.",
+                source: "Tumors of the Bladder Collecting System and Prostate PDF, Slides 41 & 42: 'Gleason Score... Gleason score is the sum of the two grades... 4+5= 9 (poorly differentiated tumor)' AND 'Fused glands: higher grade (Pattern 4) Solid sheet (Pattern 5)'"
             },
             {
                 section: "Tumors of the Bladder Collecting System",
@@ -888,6 +906,21 @@
             },
             {
                 section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO3: Recognize the risk factors associated with malignant tumors.",
+                question: "A 55-year-old man comes to the clinic to discuss prostate cancer screening. He is highly concerned about his personal risk of developing the disease. The physician explains that advancing age, family history, and specific racial demographics are established risk factors. Which of the following demographic profiles is statistically associated with the highest incidence and risk for developing prostate carcinoma?",
+                options: {
+                    A: "African American men",
+                    B: "Asian men",
+                    C: "Caucasian men",
+                    D: "Hispanic men",
+                    E: "Native American men"
+                },
+                correctAnswer: "A",
+                rationale: "Established risk factors for prostate cancer include age, family history, and race. Within the United States, it is significantly more common in African American men than in Caucasian men, and least common in Asian men.",
+                source: "Tumors of the Bladder Collecting System and Prostate PDF, Slides 29 & 30: 'Carcinoma of the Prostate Risk Factors Established • Age • Family history • Race (more common in African Americans)' AND 'Within USA • African American > > > Caucasian > > > Asian'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
                 fullLO: "LO4: Recognize the most common cytogenetic abnormalities.",
                 question: "A 55-year-old woman has a bladder tumor resected. The pathology report confirms a low-grade, non-invasive papillary urothelial carcinoma. Molecular genetic profiling of this tumor tissue is performed to guide future targeted therapies. The tumor cells are most likely to harbor a mutation in which of the following specific genes?",
                 options: {
@@ -915,6 +948,21 @@
                 correctAnswer: "E",
                 rationale: "High-grade non-invasive papillary urothelial carcinomas have a distinct molecular profile compared to low-grade tumors. They are classically driven by mutations in major tumor suppressor genes, specifically TP53 and RB.",
                 source: "Tumors of the Bladder Collecting System PDF, Slide 13: 'High Grade PUC • Major genes implicated in HG non-invasive PUC: • Mutations in INK4 gene • 9q deletion • Mutations in TP53 • Deletions of RB gene'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO4: Recognize the most common cytogenetic abnormalities.",
+                question: "A 65-year-old man undergoes molecular profiling of his newly diagnosed prostate cancer. The pathology report indicates an acquired somatic mutation involving a specific gene rearrangement that is found in roughly half of all prostate cancers. Which of the following is the most likely genetic abnormality identified in this patient's tumor?",
+                options: {
+                    A: "BCL2 translocation",
+                    B: "FGFR3 mutation",
+                    C: "MYC amplification",
+                    D: "PTEN deletion",
+                    E: "TMPRSS2-ETS fusion"
+                },
+                correctAnswer: "E",
+                rationale: "Prostate cancer pathogenesis is driven by acquired somatic mutations, including gene rearrangements that cause fusion genes. The most common cytogenetic abnormality is the TMPRSS2-ETS fusion gene, which is found in 40-50% of prostate cancers.",
+                source: "Tumors of the Bladder Collecting System and Prostate PDF, Slide 32: 'Pathogenesis... Acquired somatic mutations • Gene rearrangement causing fusion gene • TMPRSS2-ETS fusion gene in 40-50% of prostate cancers.'"
             },
             {
                 section: "Tumors of the Bladder Collecting System",
@@ -960,6 +1008,21 @@
                 correctAnswer: "B",
                 rationale: "Small cell carcinoma of the bladder is morphologically similar to small cell carcinoma of the lung (scant cytoplasm, stippled chromatin). It is commonly seen combined with urothelial carcinoma and is characterized by a highly aggressive clinical course.",
                 source: "Tumors of the Bladder Collecting System PDF, Slide 19: 'Small cell carcinoma • Commonly seen in combination with urothelial carcinoma • Similar to small cell carcinoma of lung • Sheets and nests of cells with scant cytoplasm, stippled chromatin and inconspicuous nucleoli • Highly aggressive'"
+            },
+            {
+                section: "Tumors of the Bladder Collecting System",
+                fullLO: "LO5: Recognize their behavior and prognosis.",
+                question: "A 75-year-old man with a history of advanced prostate cancer presents with severe, progressive lower back pain. Imaging reveals multiple osteoblastic (sclerotic) lesions in the lumbar vertebrae. This specific clinical presentation is highly characteristic of this tumor's biological behavior to undergo which of the following processes?",
+                options: {
+                    A: "Hematogenous metastasis to bone",
+                    B: "Local invasion of the perineal membrane",
+                    C: "Lymphatic spread to the superficial inguinal nodes",
+                    D: "Spontaneous tumor regression",
+                    E: "Transformation into a small cell carcinoma"
+                },
+                correctAnswer: "A",
+                rationale: "A classic and highly characteristic behavior of prostate cancer is its strong affinity to undergo hematogenous metastasis to the bone, specifically forming osteoblastic (sclerotic) lesions in the axial skeleton (spine). Multiple bone lesions in a male strongly raise the suspicion of metastatic prostate cancer.",
+                source: "Tumors of the Bladder Collecting System and Prostate PDF, Slide 45: 'Carcinoma of the Prostate • Metastasis can be lymphatic or hematogenous • Prostate cancer has a well described affinity to metastasize to bone (osteoblastic or sclerotic) • Multiple bone lesions in a male raise the strong suspicion of metastatic prostate cancer'"
             },
 
             // --- Section 3: Urinary Tract Infections ---
